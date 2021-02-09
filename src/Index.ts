@@ -39,7 +39,7 @@ EnvReader.configPath = path.join(__dirname, '../', config.datapath)
 const app = express()
 
 app.use(function (req, res, next) {
-// disable Clickjacking defence
+  // disable Clickjacking defence
 
   res.setHeader('X-Frame-Options', 'SAMEORIGIN')
 
@@ -82,28 +82,27 @@ app.use('/api/v1', isAuthenticated, (req, res, next) => {
 
 let serverHttps: any
 if (config.https) {
-
-  let certs: any;
+  let certs: any
 
   if (EnvReader.GlobalEnvConfig.DbConfig.useRawCerts) {
-    log.debug(`using raw certs`);
+    log.debug('using raw certs')
 
     certs = {
       webConfig: {
-        "key": EnvReader.GlobalEnvConfig.WSConfiguration.WebSocketCertificateKey,
-        "cert": EnvReader.GlobalEnvConfig.WSConfiguration.WebSocketCertificate,
-        "secureOptions": ["SSL_OP_NO_SSLv2", "SSL_OP_NO_SSLv3", "SSL_OP_NO_COMPRESSION", "SSL_OP_CIPHER_SERVER_PREFERENCE", "SSL_OP_NO_TLSv1", "SSL_OP_NO_TLSv11"],
-        "ca": EnvReader.GlobalEnvConfig.WSConfiguration.RootCACert
+        key: EnvReader.GlobalEnvConfig.WSConfiguration.WebSocketCertificateKey,
+        cert: EnvReader.GlobalEnvConfig.WSConfiguration.WebSocketCertificate,
+        secureOptions: ['SSL_OP_NO_SSLv2', 'SSL_OP_NO_SSLv3', 'SSL_OP_NO_COMPRESSION', 'SSL_OP_CIPHER_SERVER_PREFERENCE', 'SSL_OP_NO_TLSv1', 'SSL_OP_NO_TLSv11'],
+        ca: EnvReader.GlobalEnvConfig.WSConfiguration.RootCACert
       }
     }
   } else {
-    log.debug(`using cert files`);
+    log.debug('using cert files')
 
-    let WebSocketCertificatePath = path.join(__dirname, EnvReader.GlobalEnvConfig.WSConfiguration.WebSocketCertificate);
-    let WebSocketCertificateKeyPath = path.join(__dirname, EnvReader.GlobalEnvConfig.WSConfiguration.WebSocketCertificateKey);
-    let RootCACertPath;
+    const WebSocketCertificatePath = path.join(__dirname, EnvReader.GlobalEnvConfig.WSConfiguration.WebSocketCertificate)
+    const WebSocketCertificateKeyPath = path.join(__dirname, EnvReader.GlobalEnvConfig.WSConfiguration.WebSocketCertificateKey)
+    let RootCACertPath
     if (EnvReader.GlobalEnvConfig.WSConfiguration.RootCACert) {
-      RootCACertPath = path.join(__dirname, EnvReader.GlobalEnvConfig.WSConfiguration.RootCACert);
+      RootCACertPath = path.join(__dirname, EnvReader.GlobalEnvConfig.WSConfiguration.RootCACert)
       if (!existsSync(RootCACertPath)) {
         log.error(`Root cert ${RootCACertPath} doesnt exist. Exiting..`)
         process.exit(1)
@@ -119,10 +118,10 @@ if (config.https) {
     }
     certs = {
       webConfig: {
-        "key": readFileSync(WebSocketCertificateKeyPath),
-        "cert": readFileSync(WebSocketCertificatePath),
-        "secureOptions": ["SSL_OP_NO_SSLv2", "SSL_OP_NO_SSLv3", "SSL_OP_NO_COMPRESSION", "SSL_OP_CIPHER_SERVER_PREFERENCE", "SSL_OP_NO_TLSv1", "SSL_OP_NO_TLSv11"],
-        "ca": (EnvReader.GlobalEnvConfig.WSConfiguration.RootCACert !== "" ? readFileSync(RootCACertPath) : "")
+        key: readFileSync(WebSocketCertificateKeyPath),
+        cert: readFileSync(WebSocketCertificatePath),
+        secureOptions: ['SSL_OP_NO_SSLv2', 'SSL_OP_NO_SSLv3', 'SSL_OP_NO_COMPRESSION', 'SSL_OP_CIPHER_SERVER_PREFERENCE', 'SSL_OP_NO_TLSv1', 'SSL_OP_NO_TLSv11'],
+        ca: (EnvReader.GlobalEnvConfig.WSConfiguration.RootCACert !== '' ? readFileSync(RootCACertPath) : '')
       }
     }
   }
